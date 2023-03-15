@@ -1,0 +1,16 @@
+{
+"apikey_file":"./src/apikey.json",
+"queries":["chatGPT", "machine%20learning"],
+"languages":["en"],
+"days":15,
+"request_sleep_time":0.2,
+"responses_file":"./data/responses.pkl",
+"parsed_file":"./data/parsed.pkl",
+"transformers":["nlptown/bert-base-multilingual-uncased-sentiment",
+                "z-dickson/multilingual_sentiment_newspaper_headlines"],
+"feature_columns":["title","description"],
+"language_column":"language",
+"normalized_scores":"./data/normalized.pkl",
+"scaled_str_scores":"./data/scaled_str.pkl",
+"scaled_int_scores":"./data/scaled_int.pkl"
+}

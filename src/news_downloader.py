@@ -1,7 +1,7 @@
 import requests
 import datetime
 import time
-from helpers import *
+from utilities import *
 
 class NewsDownloader:
     """
@@ -77,6 +77,6 @@ class NewsDownloader:
 
 if __name__ == "__main__":
     config = load_config("./src/config.json")
-    downloader = NewsDownloader(config, debug=True)
+    downloader = NewsDownloader(config, read_from_disk=False)
     request_downloaded = downloader.transform()
     to_pickle(request_downloaded, config["responses_file"])

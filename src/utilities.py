@@ -3,6 +3,37 @@ import json
 import numpy as np
 import requests
 import certifi
+import pandas as pd
+import base64
+
+def _read_n_fix(filename, filter_out=[], dropna=[], n_show=1, verbose=True):
+    data = pd.read_csv(filename, dtype=str)
+    cols = [col.replace(".","_").replace("/","").replace("  "," ").replace(" ","_").lower() for col in data.columns]
+    data.columns = cols
+
+    if verbose:
+        print(data.shape)
+        display(data.head(n_show))
+
+    if dropna:
+        data.dropna(subset=dropna, inplace=True)
+        print(f"Shape after droped NaNs in {dropna}: {data.shape}")
+        display(data.head(n_show))
+    
+    if filter_out:
+        data = data.filter(filter_out)
+        print(f"Shape after filtered NaNs {filter_out}: {data.shape}")
+        display(data.head(n_show))
+    return data
+
+def get_base64(s):
+    """
+    returns base64 encoding of a string
+    """
+    s_ascii = s.encode("ascii")
+    base64_bytes = base64.b64encode(s_ascii)
+    base64_string = base64_bytes.decode("ascii")
+    return base64_string
 
 def to_pickle(file, filename):
     """"
@@ -61,9 +92,27 @@ def filter_high_variability(data, min_values):
 
 def load_config(config_path:str) -> dict:
     """
-    setup main variables
+    loads json into dictionary
     """
     # read parameters from config file
     with open(config_path, mode="rb") as file:
         config = json.load(file)
     return config
+
+def save_config(config, config_path:str) -> dict:
+    """
+    saves dictionary to json
+    """
+    # save parameters from config file
+    with open(config_path, 'w') as file:
+        json.dump(config, file)
+    return True
+
+def ms_to_hours(millis):
+    """
+    convert milliseconds into hours, minutes, seconds
+    """
+    seconds, milliseconds = divmod(millis, 1000)
+    minutes, seconds = divmod(seconds, 60)
+    hours, minutes = divmod(minutes, 60)
+    return ("%d:%d:%d" % (hours, minutes, seconds))

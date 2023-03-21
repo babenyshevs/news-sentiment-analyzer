@@ -5,8 +5,18 @@ import requests
 import certifi
 import pandas as pd
 import base64
+from IPython.display import display
 
-def _read_n_fix(filename, filter_out=[], dropna=[], n_show=1, verbose=True):
+def _read_n_fix(filename:str, filter_out=[], dropna=[], n_show=1, verbose=True) -> pd.DataFrame:
+    """
+    made for dirty datasets, reads dataset and returns selected preview of what's inside, plus some cleansing on the way
+    filename: path to the file
+    filter_out: list of columns to filter out (if nothing provided returns full dataframe)
+    dropna: list of columns to drop NaN's from (if nothing provided returns full dataframe)
+    n_show: number of observatiosn to show in preview of a dataframe
+    verbose: verbosity (show/not shape of dataframe and first n-lines)
+    return: dataframe
+    """
     data = pd.read_csv(filename, dtype=str)
     cols = [col.replace(".","_").replace("/","").replace("  "," ").replace(" ","_").lower() for col in data.columns]
     data.columns = cols
@@ -24,6 +34,7 @@ def _read_n_fix(filename, filter_out=[], dropna=[], n_show=1, verbose=True):
         data = data.filter(filter_out)
         print(f"Shape after filtered NaNs {filter_out}: {data.shape}")
         display(data.head(n_show))
+
     return data
 
 def get_base64(s):
@@ -93,6 +104,8 @@ def filter_high_variability(data, min_values):
 def load_config(config_path:str) -> dict:
     """
     loads json into dictionary
+    config_path: path to load from
+    return: config dictionary
     """
     # read parameters from config file
     with open(config_path, mode="rb") as file:
@@ -102,15 +115,18 @@ def load_config(config_path:str) -> dict:
 def save_config(config, config_path:str) -> dict:
     """
     saves dictionary to json
+    config_path: path to save to
     """
     # save parameters from config file
     with open(config_path, 'w') as file:
         json.dump(config, file)
     return True
 
-def ms_to_hours(millis):
+def ms_to_hours(millis: int) -> str:
     """
     convert milliseconds into hours, minutes, seconds
+    millis: time in milliseconds
+    returns: string of hours: minutes: seconds
     """
     seconds, milliseconds = divmod(millis, 1000)
     minutes, seconds = divmod(seconds, 60)

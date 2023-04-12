@@ -1,5 +1,5 @@
 import pandas as pd
-from utilities import *
+from helpers import *
 
 class NewsParser:
     """
@@ -45,7 +45,7 @@ class NewsParser:
         return parsed_df
 
 if __name__ == "__main__":
-    from utilities import *
+    from helpers import *
     config = load_config("./src/config.json")
     downloaded = from_pickle(config["responses_file"])
 

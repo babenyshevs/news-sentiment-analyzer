@@ -1,4 +1,4 @@
-from utilities import *
+from helpers import *
 from sklearn.pipeline import Pipeline
 from news_downloader import NewsDownloader
 from news_parser import NewsParser

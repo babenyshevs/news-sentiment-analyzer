@@ -1,4 +1,4 @@
-from utilities import load_config
+from helpers import load_config
 from news_downloader import NewsDownloader
 
 import datetime as dt
